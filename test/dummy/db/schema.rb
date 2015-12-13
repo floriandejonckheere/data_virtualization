@@ -11,13 +11,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151209103350) do
+ActiveRecord::Schema.define(version: 20151213170036) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "cars", force: :cascade do |t|
-    t.text     "color"
-    t.integer  "price"
+    t.string   "color",                   array: true
+    t.integer  "price",                   array: true
+    t.string   "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "data_sources", force: :cascade do |t|
+    t.string   "name",            null: false
+    t.string   "keys",                         array: true
+    t.datetime "cache_timestamp"
+    t.integer  "data_model_id"
+    t.string   "data_model_type"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "data_sources", ["data_model_type", "data_model_id"], name: "index_data_sources_on_data_model_type_and_data_model_id", using: :btree
+  add_index "data_sources", ["name", "data_model_id"], name: "index_data_sources_on_name_and_data_model_id", unique: true, using: :btree
+  add_index "data_sources", ["name"], name: "index_data_sources_on_name", using: :btree
 
 end

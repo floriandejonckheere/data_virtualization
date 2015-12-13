@@ -3,6 +3,19 @@ module DataVirtualization
     extend ActiveSupport::Concern
 
     included do
+      def invalidate_cache!
+        self.data_sources.each { |ds| ds.invalidate_cache! }
+      end
+
+      def valid_cache?
+        self.data_sources.each { |ds| return false unless ds.valid_cache? }
+        true
+      end
+
+      private
+      def resolve_data_source(data_source_sym)
+        self.data_sources.find_by(:name => data_source_sym.to_s)
+      end
     end
 
     module ClassMethods
@@ -35,6 +48,56 @@ module DataVirtualization
           else
             (@data_mapping[attribute] ||= []) << target
           end
+
+          # Define datasource-specific accessor
+          define_method("#{attribute.to_s}_#{target.to_s}") do
+            data_source = resolve_data_source target
+            raise Errors::NoDataSourceError if data_source.nil?
+            raise Errors::NoDataKeyError unless data_source.keys
+
+            values = []
+            data_source.keys.each do |key|
+              value = data_source.data_model.send(attribute, key)
+              p "GOT VALUE #{value}"
+              values += Array value
+            end
+            values
+          end
+
+          # Define global accessor (if not defined before)
+          define_method(attribute.to_s) do
+            raise Errors::InvalidMappingError "no mapping defined for attribute #{attribute.to_s}" unless self.class.data_mapping.key? attribute
+
+            data_source_syms = self.class.data_mapping[attribute]
+            raise Errors::InvalidMappingError "no mapping defined for attribute #{attribute.to_s}" unless data_source_syms
+
+            valid = true
+            resolved_data_sources = []
+            data_source_syms.each do |data_source_sym|
+              data_source = resolve_data_source data_source_sym
+              raise Errors::NoDataSourceError unless data_source
+              resolved_data_sources << data_source
+
+              valid = false unless data_source.valid_cache?
+            end
+            if valid
+              # Cache hit
+              return read_attribute attribute
+            else
+              # Cache miss
+              value = []
+              resolved_data_sources.each do |resolved_data_source|
+                value += Array send("#{attribute.to_s}_#{resolved_data_source.name}".to_sym)
+                resolved_data_source.validate_cache!
+              end
+              value.uniq!
+
+              # TODO: update group of attributes instead of single attribute
+              # Use update_column to avoid using default accessors which result in a loop
+              update_column attribute, value
+              value
+            end
+          end unless self.respond_to? attribute
         end
       end
     end

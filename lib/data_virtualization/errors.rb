@@ -5,5 +5,7 @@ module DataVirtualization
     class InvalidMappingError < Error; end
     class NoDataKeyError < Error; end
     class NoDataSourceError < Error; end
+
+    class NoDataModelError < Error; end
   end
 end

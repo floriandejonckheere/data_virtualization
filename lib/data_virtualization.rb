@@ -1,6 +1,11 @@
-require 'data_virtualization/version'
-require 'data_virtualization/errors'
-require 'data_virtualization/cache'
-require 'data_virtualization/virtualizable'
+require 'data_virtualization/version.rb'
+require 'data_virtualization/errors.rb'
+require 'data_virtualization/setup.rb'
+require 'data_virtualization/virtualizable.rb'
 
-require 'generators/base'
+require 'data_virtualization/app/models/concerns/data_source.rb'
+
+require 'data_virtualization/app/data_models/base.rb'
+
+require 'generators/base.rb'
+require 'generators/data_model.rb'

@@ -7,17 +7,17 @@ module DataVirtualization
     include Rails::Generators::Migration
     source_root File.expand_path('../templates/', File.dirname(__FILE__))
 
-    def copy_cache_initializer_file
-      copy_file 'cache_initializer.rb', 'config/initializers/cache.rb'
+    def create_initializer
+      copy_file 'config/initializers/data_virtualization.rb', 'config/initializers/data_virtualization.rb'
     end
 
     def create_data_source_model
-      template 'data_source.rb', 'app/models/data_source.rb'
-      migration_template 'create_data_sources.rb', 'db/migrate/create_data_sources.rb'
+      template 'app/models/data_source.rb', 'app/models/data_source.rb'
+      migration_template 'db/migrate/create_data_sources.rb', 'db/migrate/create_data_sources.rb'
     end
 
     def self.next_migration_number(path)
-      Time.now.utc.strftime("%Y%m%d%H%M%S")
+      Time.now.utc.strftime('%Y%m%d%H%M%S')
     end
   end
 end

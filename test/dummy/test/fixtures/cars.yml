@@ -1,9 +1,5 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+red-mustang:
+  type: Car
 
-one:
-  color: MyText
-  price: 1
-
-two:
-  color: MyText
-  price: 1
+black-a4:
+  type: Car::Audi
