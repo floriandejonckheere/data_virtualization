@@ -12,6 +12,8 @@ module DataVirtualization
         end
 
         @data_mapping ||= {}
+
+        has_many :data_sources, :as => :data_model
       end
 
       def inherited(subclass)

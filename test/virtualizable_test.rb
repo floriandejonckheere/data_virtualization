@@ -15,4 +15,14 @@ class VirtualizableTest < ActiveSupport::TestCase
     assert Car::Audi.data_mapping.key? :price
     assert_equal [:manufacturer, :dealership].sort, Car::Audi.data_mapping[:price].sort
   end
+
+  def test_attributes
+    assert_respond_to Car.new, :color
+    assert_respond_to Car.new, :price
+  end
+
+  def test_has_many_data_sources
+    assert_respond_to Car.new, :data_sources
+    assert_equal 0, Car.new.data_sources.count
+  end
 end
