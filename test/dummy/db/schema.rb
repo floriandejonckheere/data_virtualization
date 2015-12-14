@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151213170036) do
+ActiveRecord::Schema.define(version: 20151214105231) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,17 +25,17 @@ ActiveRecord::Schema.define(version: 20151213170036) do
   end
 
   create_table "data_sources", force: :cascade do |t|
-    t.string   "name",            null: false
-    t.string   "keys",                         array: true
+    t.string   "name",             null: false
+    t.string   "keys",                          array: true
     t.datetime "cache_timestamp"
-    t.integer  "data_model_id"
-    t.string   "data_model_type"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.integer  "data_entity_id"
+    t.string   "data_entity_type"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
-  add_index "data_sources", ["data_model_type", "data_model_id"], name: "index_data_sources_on_data_model_type_and_data_model_id", using: :btree
-  add_index "data_sources", ["name", "data_model_id"], name: "index_data_sources_on_name_and_data_model_id", unique: true, using: :btree
+  add_index "data_sources", ["data_entity_type", "data_entity_id"], name: "index_data_sources_on_data_entity_type_and_data_entity_id", using: :btree
+  add_index "data_sources", ["name", "data_entity_id"], name: "index_data_sources_on_name_and_data_entity_id", unique: true, using: :btree
   add_index "data_sources", ["name"], name: "index_data_sources_on_name", using: :btree
 
 end

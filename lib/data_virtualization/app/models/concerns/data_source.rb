@@ -13,16 +13,17 @@ module DataVirtualization
       end
 
       def valid_cache?
-        return false unless cache_timestamp
+        p "cache for #{self.name} #{self.data_entity.id}: #{self.cache_timestamp}"
+        return false unless self.cache_timestamp
         return ((Time.now - self.cache_timestamp) <= data_model.valid_for)
       end
 
       def validate_cache!
-        update :cache_timestamp => Time.now
+        self.update_column :cache_timestamp, Time.now
       end
 
       def invalidate_cache!
-        update :cache_timestamp => nil
+        self.update_column :cache_timestamp, nil
       end
     end
 

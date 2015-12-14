@@ -3,13 +3,19 @@ module DataVirtualization
     extend ActiveSupport::Concern
 
     included do
+      def valid_cache?
+        self.data_sources.each { |ds| return false unless ds.valid_cache? }
+        true
+      end
+
       def invalidate_cache!
         self.data_sources.each { |ds| ds.invalidate_cache! }
       end
 
-      def valid_cache?
-        self.data_sources.each { |ds| return false unless ds.valid_cache? }
-        true
+      def clear_cache!
+        invalidate_cache!
+
+        update_columns self.class.data_mapping.keys.zip([]).to_h
       end
 
       private
@@ -26,7 +32,7 @@ module DataVirtualization
 
         @data_mapping ||= {}
 
-        has_many :data_sources, :as => :data_model
+        has_many :data_sources, :as => :data_entity
       end
 
       def inherited(subclass)
@@ -58,7 +64,6 @@ module DataVirtualization
             values = []
             data_source.keys.each do |key|
               value = data_source.data_model.send(attribute, key)
-              p "GOT VALUE #{value}"
               values += Array value
             end
             values
@@ -80,6 +85,7 @@ module DataVirtualization
 
               valid = false unless data_source.valid_cache?
             end
+
             if valid
               # Cache hit
               return read_attribute attribute

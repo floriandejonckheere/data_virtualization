@@ -5,11 +5,11 @@ class CreateDataSources < ActiveRecord::Migration
       t.string :keys,               :array => true
       t.timestamp :cache_timestamp
 
-      t.references :data_model,     :index => true,   :polymorphic => true
+      t.references :data_entity,     :index => true,   :polymorphic => true
 
       t.timestamps null: false
     end
 
-    add_index :data_sources, [:name, :data_model_id], unique: true
+    add_index :data_sources, [:name, :data_entity_id], unique: true
   end
 end

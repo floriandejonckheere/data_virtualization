@@ -6,6 +6,8 @@ module DataModels
           'red'
         elsif key == 'black_a4_manufacturer_key'
           'black'
+        else
+          raise "invalid key #{key}"
         end
       end
 
@@ -14,6 +16,8 @@ module DataModels
           23895
         elsif key == 'black_a4_manufacturer_key'
           35900
+        else
+          raise "invalid key #{key}"
         end
       end
     end

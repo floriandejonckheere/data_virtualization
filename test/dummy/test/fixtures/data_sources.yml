@@ -1,18 +1,18 @@
 red-mustang-manufacturer:
   name: manufacturer
-  data_model: red-mustang (Car)
+  data_entity: red-mustang (Car)
   keys:
     - red_mustang_manufacturer_key
 
 red-mustang-dealership:
   name: dealership
-  data_model: red-mustang (Car)
+  data_entity: red-mustang (Car)
   keys:
     - red_mustang_dealership_key
 
 black-a4-manufacturer:
   name: manufacturer
-  data_model: black-a4 (Car::Audi)
+  data_entity: black-a4 (Car::Audi)
   keys:
     - black_a4_manufacturer_key
 
@@ -20,6 +20,6 @@ black-a4-manufacturer:
 
 black-a4-audi_manufacturer:
   name: audi_manufacturer
-  data_model: black-a4 (Car::Audi)
+  data_entity: black-a4 (Car::Audi)
   keys:
     - black_a4_audi_manufacturer_key
